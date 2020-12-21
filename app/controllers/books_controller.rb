@@ -28,15 +28,25 @@ def create
   end
 
   def update
-    book = Book.find(params[:id])
-    book.update(book_params)
-    redirect_to book_path(book)
+    @book = Book.find(params[:id])
+    if @book.update(book_params)
+      redirect_to book_path(@book), notice: 'Book was successfully created.'
+    else
+      @books = Book.all
+        flash.now[:danger] = 'error'
+        render :index
+    end
   end
 
   def destroy
-    book = Book.find(params[:id])
-    book.destroy
-    redirect_to books_path
+    if @book = Book.find(params[:id])
+      @book.destroy
+      redirect_to books_path(@book), notice: 'Book was successfully created.'
+  else
+      @books = Book.all
+        flash.now[:danger] = 'error'
+        render :index
+    end
   end
 
 private
